@@ -1,5 +1,16 @@
 #include "resourceimageprovider.h"
 
+ResourceImageProvider::ResourceImageProvider()
+    : QQuickImageProvider(QQmlImageProviderBase::Image)
+{
+
+}
+
+ResourceImageProvider::~ResourceImageProvider()
+{
+
+}
+
 QImage ResourceImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
     QString rsrcid = "Documents/" + id;
