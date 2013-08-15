@@ -7,7 +7,7 @@ Page {
     id: page
     SilicaListView {
         id: listView
-        model: 20
+        model: 14
         anchors.fill: parent
         header: PageHeader {
             title: "Nested Page"

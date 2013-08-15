@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/lib">
+        <file alias="HexagonTools/Grid.js">lib/HexagonTools/js/Grid.js</file>
+        <file alias="HexagonTools/HexagonTools.js">lib/HexagonTools/js/HexagonTools.js</file>
+        <file>lib/HexagonTools/js/HexCalcs.js</file>
+    </qresource>
+    <qresource prefix="/src">
+        <file alias="Map.js">pages/Map.js</file>
+    </qresource>
+    <qresource prefix="/maps">
+        <file>maps/From The Sea.map</file>
+    </qresource>
+    <qresource prefix="/res"/>
+</RCC>
