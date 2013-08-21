@@ -9,12 +9,12 @@ ApplicationWindow
     initialPage: FirstPage { }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
-    Image {
-        id: land1
-        source: "image://res/land1.png";
-        Component.onCompleted: Game.drawLand()
-        //visible: false
-    }
+//     Image {
+//        id: land1
+//        source: "image://res/land1.png";
+//        Component.onCompleted: Game.drawLand()
+//        //visible: false
+//    }
 }
 
 

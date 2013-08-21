@@ -11,25 +11,28 @@ Map = function(width, height, map) {
     this.map = map
     for (var h = 0; h < this.grid.Hexes.length; h++)
     {
-        var hex = this.grid.Hexes[h]
-        console.log(hex.PathCoOrdX)
+        var hex = this.grid.Hexes[h]        
         this.hex[hex.Id] = map.hex[hex.PathCoOrdY][hex.PathCoOrdX]
     }
 }
 
 function drawLand(ctx, region) {
 
-    var land = Qt.createQmlObject('import QtQuick 2.0; Image { source: "qrc:///res/res/modern/land'+region+'.png"; visible: false; }', appWindow)
+    var land = Qt.createQmlObject('import QtQuick 2.0; Image { source: "image://res/modern/land'+region+'.png"; visible: false; }', parent)
     ctx.globalCompositeOperation = 'source-in';
     ctx.drawImage(land, 0, 0)
 }
 
+var regionCount = 8
+var landRegion = regionCount
+var seaRegion = regionCount+1
+
 Map.prototype.paint = function(ctx) {
     var hexCnvs = new Array()
     var hexCtxs = new Array()
-    for (var i = 0; i < 8; i++)
+    for (var i = 0; i < regionCount+2; i++)
     {
-        var hexCnv = Qt.createQmlObject('import QtQuick 2.0; Canvas { width: 800; height: 500; renderStrategy: Canvas.Immediate; visible: false; }', appWindow)
+        var hexCnv = Qt.createQmlObject('import QtQuick 2.0; Canvas { anchors.fill: parent; renderStrategy: Canvas.Immediate; visible: false; }', parent)
         hexCnvs.push(hexCnv)
         hexCtxs.push(hexCnv.getContext('2d'))
     }
@@ -39,20 +42,64 @@ Map.prototype.paint = function(ctx) {
         var hex = this.grid.Hexes[h]
         if ("id" in this.hex[hex.Id])
         {
-            var ctxid = this.hex[hex.Id].id
-            console.log(ctxid)
-            hex.paint(hexCtxs[ctxid-1])
+            var ctxid = this.hex[hex.Id].id            
+            if (ctxid <= regionCount)
+                hex.paint(hexCtxs[ctxid-1])
         } else {
-            hex.draw(ctx)
+            if (this.hex[hex.Id].toString() === "Land")
+                hex.paint(hexCtxs[landRegion])
+            if (this.hex[hex.Id].toString() === "Sea")
+                hex.paint(hexCtxs[seaRegion])
         }
     }
-    //MapPainter.paintContext(ctx)
 
-    for (var i = 0; i < 8; i++)
+    for (var i = 0; i < regionCount; i++)
     {
         drawLand(hexCtxs[i], i+1)
         ctx.drawImage(hexCnvs[i], 0, 0)
     }
+
+    var land = Qt.createQmlObject('import QtQuick 2.0; Image { source: "image://res/modern/land.png"; visible: false; }', parent)
+    hexCtxs[landRegion].globalCompositeOperation = 'source-in';
+    hexCtxs[landRegion].drawImage(land, 0, 0)
+    ctx.drawImage(hexCnvs[landRegion], 0, 0)
+
+    var sea = Qt.createQmlObject('import QtQuick 2.0; Image { source: "image://res/modern/water.png"; visible: false; }', parent)
+    hexCtxs[seaRegion].globalCompositeOperation = 'source-in';
+    hexCtxs[seaRegion].drawImage(sea, 0, 0)
+    ctx.drawImage(hexCnvs[seaRegion], 0, 0)
+
+    for (var i = 0; i < regionCount; i++)
+    {
+        //hexCnvs[i].destroy()
+        //hexCtxs[i].destroy()
+    }
+    for (var r = 1; r <= regionCount; r++)
+        for (var h = 0; h < this.grid.Hexes.length; h++)
+        {
+            var hex = this.grid.Hexes[h]
+            if ("id" in this.hex[hex.Id])
+            {
+                var rid = this.hex[hex.Id].id
+                if (rid === r)
+                {
+                    var neigh = this.grid.GetNeighbors(hex.Id)
+                    for (var n = 0; n < neigh.length; n++)
+                    {
+                        if (this.hex[neigh[n].Id].id !== rid)
+                        {
+                            ctx.beginPath()
+                            ctx.moveTo(hex.Points[n].X, hex.Points[n].Y)
+                            ctx.lineTo(hex.Points[(n+1)%6].X, hex.Points[(n+1)%6].Y)
+                            ctx.closePath()
+                            ctx.lineWidth = 1
+                            ctx.strokeStyle = "black"
+                            ctx.stroke()
+                        }
+                    }
+                }
+            }
+        }
 }
 
 Map.prototype.click = function(x, y) {
@@ -72,6 +119,14 @@ Sea = function() {
 }
 
 Land = function() {
+}
+
+Land.prototype.toString = function() {
+    return "Land"
+}
+
+Sea.prototype.toString = function() {
+    return "Sea"
 }
 
 Region.prototype.toString = function() {

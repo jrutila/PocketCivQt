@@ -13,7 +13,7 @@ ResourceImageProvider::~ResourceImageProvider()
 
 QImage ResourceImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-    QString rsrcid = "Documents/" + id;
+    QString rsrcid = "res/" + id;
     QImage image(rsrcid);
     QImage result;
 

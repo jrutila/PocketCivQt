@@ -28,7 +28,9 @@ OTHER_FILES = \
     res/welcome.jpg \
     lib/HexagonTools/js/HexCalcs.js \
     lib/HexagonTools/js/HexagonTools.js \
-    lib/HexagonTools/js/Grid.js
+    lib/HexagonTools/js/Grid.js \
+    main_desktop.qml \
+    Game/GameMap.qml
 
 RESOURCES += \
     PocketCiv.qrc
