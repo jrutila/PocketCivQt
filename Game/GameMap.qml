@@ -12,8 +12,18 @@ Flickable {
     property var spec
 
     Image {
-        id: img
-        source: "image://res/modern/land1.png"
+        id: imgMountain
+        source: "image://res/modern/mtn.png"
+        visible: false
+    }
+    Image {
+        id: imgVolcano
+        source: "image://res/modern/vol.png"
+        visible: false
+    }
+    Image {
+        id: imgDesert
+        source: "image://res/modern/desert.png"
         visible: false
     }
 
@@ -48,6 +58,24 @@ Flickable {
         MouseArea {
             anchors.fill: parent
             onClicked: gameCanvas.map.click(mouse.x, mouse.y)
+        }
+
+        DropArea {
+            anchors.fill: parent
+            keys: [ 'tribe' ]
+        }
+
+        Rectangle {
+            id: tribeCanvas
+            width: 40
+            height: 20
+            color: "red"
+
+            MouseArea {
+                anchors.fill: parent
+                drag.target: tribeCanvas
+                Drag.keys: [ 'tribe' ]
+            }
         }
     }
     //                GameCanvas {
